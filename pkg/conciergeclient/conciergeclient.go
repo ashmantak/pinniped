@@ -9,6 +9,7 @@ import (
 	"crypto/x509"
 	"encoding/base64"
 	"fmt"
+	"go.pinniped.dev/internal/crypto/ptls"
 	"net/url"
 	"strings"
 
@@ -157,6 +158,7 @@ func (c *Client) clientset() (conciergeclientset.Interface, error) {
 	}
 	client, err := kubeclient.New(
 		kubeclient.WithConfig(cfg),
+		kubeclient.WithTLSConfigFunc(ptls.Default),
 		kubeclient.WithMiddleware(groupsuffix.New(c.apiGroupSuffix)),
 	)
 	if err != nil {
